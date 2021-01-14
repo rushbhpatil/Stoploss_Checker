@@ -1,0 +1,634 @@
+ScreenManager:
+    Signin:
+    Option:
+    Body:
+        id:body
+    Remove_stock:
+    ListApp:
+
+
+<SwipeToDeleteItem>:
+
+    size_hint_y: None
+    height: content.height
+    swipe_rectangle: self.x, self.y , self.width, self.height
+    swipe_timeout: 1000000
+    swipe_distance: 500
+
+    MDCardSwipeLayerBox:
+        # Content under the card.
+        padding: "8dp"
+
+        MDIconButton:
+            icon: "trash-can"
+            pos_hint: {"center_y": .5}
+            on_press: root.parent.parent.parent.parent.remove_item_csv(content.text,content.secondary_text,root)
+
+
+    MDCardSwipeFrontBox:
+
+        id: card
+
+        # Content of card.
+        ThreeLineListItem:
+            id: content
+            text: root.text
+
+            secondary_text: root.secondary_text
+            tertiary_text: root.tertiary_text
+            _no_ripple_effect: True
+<Remove_stock>:
+    name: 'RemoveStock_screen'
+    on_enter:root.build()
+    BoxLayout:
+        orientation: "vertical"
+        spacing: "10dp"
+
+        MDToolbar:
+            title:'List of shares'
+            type: "top"
+            size_hint_y:0.1
+            pos_hint: {'top':1.0}
+            left_action_items: [["arrow-left", lambda x: root.back()]]
+            md_bg_color:152/255,87/255,189/255,1
+            elevation:10
+
+
+        ScrollView:
+            scroll_timeout : 10
+            scroll_type:["content"]
+
+            MDList:
+                id: md_list
+                padding: 0
+
+                pos_hint: {'center_x': .5, 'center_y': .5}
+<Body>:
+    name: 'body_screen'
+    canvas.before:
+        Color:
+            rgba: 155/255, 159/255, 250/255, 1
+
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+<DropDownWidget>:
+    canvas.before:
+        Color:
+            rgba: 155/255, 159/255, 250/255, 1
+
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    cols:1
+    id: DropDownWidget
+
+    stock_name: stock_name
+    stock_symbol: stock_symbol
+    purchase_price: purchase_price
+    stop_loss: stop_loss
+
+    txt_input: txt_input
+    rv: rv
+    orientation:'vertical'
+    spacing: '20dp'
+    MDToolbar:
+
+        title:'Add Stock'
+        type: "top"
+        size_hint_y:0.1
+        pos_hint: {'top':1.0}
+        left_action_items: [["arrow-left", lambda x: root.back()]]
+        md_bg_color:152/255,87/255,189/255,1
+        elevation:10
+
+    ScrollView:
+    	scroll_type:["content"]
+        MDBoxLayout:
+            spacing:'5dp'
+            orientation:'vertical'
+            MDCard:
+
+                md_bg_color:155/255, 159/255, 250/255, 1
+
+
+
+                pos_hint: {'center_x': .5, 'center_y': .5}
+
+                elevation:0
+
+                orientation:'vertical'
+                spacing:'10dp'
+
+                MyTextInput:
+                    id: txt_input
+                    hint_text: "Search"
+                    icon_right: "magnify"
+                    icon_right_color:1,1,1,1
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    size_hint:.9,.2
+                    line_color_normal:184/255,187/255,252/255,1
+                    normal_color:1,1,1,0
+
+
+                RV:
+                    id: rv
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    size_hint:1,0.6
+                    data: root.rv_data_list
+
+
+            MDCard:
+
+                md_bg_color:155/255, 159/255, 250/255, 1
+                orientation:'horizontal'
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                size_hint:.9,.4
+                elevation:0
+
+
+
+                MDTextField:
+                    id: stock_name
+                    hint_text: "Stock Name"
+
+                    readonly: True
+                    multiline:True
+                    mode:'rectangle'
+                    required: True
+
+                    outline_color:184/255,187/255,252/255,1
+                    size:.5,.3
+
+
+            MDCard:
+                orientation:'horizontal'
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                size_hint:.9,.4
+                elevation:0
+                md_bg_color:155/255, 159/255, 250/255, 1
+
+
+                MDTextField:
+                    id: stock_symbol
+                    hint_text: "Stock Symbol"
+                    readonly: True
+                    multiline:False
+                    mode:'rectangle'
+                    required: True
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    line_color_normal:184/255,187/255,252/255,1
+
+
+            MDCard:
+                orientation:'horizontal'
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                size_hint:.9,.4
+                elevation:0
+                md_bg_color:155/255, 159/255, 250/255, 1
+
+
+
+                MDTextField:
+                    id: purchase_price
+                    hint_text: "Purchase Price(\u20B9)"
+                    input_filter: 'float'
+                    multiline:False
+                    mode:'rectangle'
+                    required: True
+                    line_color_normal:184/255,187/255,252/255,1
+                    size:.5,.3
+
+            MDCard:
+                orientation:'horizontal'
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                size_hint:.9,.4
+                elevation:0
+                md_bg_color:155/255, 159/255, 250/255, 1
+
+
+                MDTextField:
+                    id: stop_loss
+                    hint_text: "Stop Loss(\u20B9)"
+                    input_filter: 'float'
+
+                    multiline:False
+                    mode:'rectangle'
+                    required: True
+                    size:.5,.3
+                    color_mode: 'custom'
+                    line_color_normal:1,1,1,1
+
+
+
+            MDCard:
+
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                size_hint:.5,.5
+                elevation:0
+                md_bg_color:155/255, 159/255, 250/255, 1
+
+                MDRaisedButton:
+                    text:"Submit"
+                    pos_hint: {'center_x': .5, 'center_y': .6}
+                    size_hint:.5,.7
+                    md_bg_color:40/255, 44/255, 177/255, 1
+                    elevation:15
+                    on_press:
+                        root.btn_input()
+
+
+
+
+
+<MyTextInput>:
+    id: MyTextInput
+    mode:'rectangle'
+    readonly: False
+    multiline: False
+
+<SelectableLabel>:
+
+    id: SelectableLabel
+    multiline: True
+
+
+    # Draw a background to indicate selection
+
+
+    canvas:
+
+        Color:
+            rgba: (218/255,112/255,214/255,.6) if self.selected else (1, 1, 1, 0.5)
+        Rectangle:
+            pos: self.pos if self.selected else (0,0)
+            size: self.size if self.selected else (0,0)
+
+
+    halign:'center'
+
+
+
+
+
+<RV>:
+
+    canvas:
+        Color:
+            rgba: 1,1,1,1
+
+        Line:
+            width: 1.1
+            rectangle: self.x , self.y, self.width, self.height
+
+
+
+    height: 10
+    bar_width: 20
+    scroll_type:['content']
+    viewclass: 'SelectableLabel'
+
+    SelectableRecycleBoxLayout:
+
+        cols:1
+        row_default_height: 90
+        data:root.data
+        row_force_default:True
+        default_size: self.size, dp(20)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: 1000
+
+        multiselect: False
+
+<Signin>:
+    canvas.before:
+        Color:
+            rgba: 239/255, 235/255, 216/255, 1
+
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    name: 'signin_screen'
+    user_name: user_name
+
+    orientation:'vertical'
+    MDTextField:
+
+        id: user_name
+        hint_text:'Email'
+
+        icon_right: "email"
+        icon_right_color:0,0,0,1
+        required: True
+
+        color_active: 0, 0, 0, 1
+        helper_text: "Invalid email id"
+        helper_text_mode: "on_error"
+        halign:'center'
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        size_hint_x: 0.9
+        width:300
+        color_mode: 'custom'
+
+        line_color_normal: 0,0,0,1
+
+
+    MDRoundFlatIconButton:
+        icon: "arrow-right"
+        text:"Submit"
+        text_color:1,1,1,1
+        font_size: 20
+        pos_hint: {'center_x': .5, 'center_y': .4}
+        halign:'center'
+        md_bg_color:36/255,76/255,100/255,1
+        elevation:10
+
+
+
+
+        background_color: (1,1,1,1)
+        on_press :
+            root.btn()
+    NavigationLayout:
+        ScreenManager:
+
+            Screen:
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    MDToolbar:
+                        title:'SignIn'
+                        type: "top"
+                        size_hint_y:0.1
+                        pos_hint: {'top':1.0}
+                        left_action_items: [["menu", lambda x: nav_drawer.toggle_nav_drawer()]]
+                        right_action_items: [["exit-to-app", lambda x: app.stop()]]
+                        md_bg_color:152/255,87/255,189/255,1
+                        elevation:10
+                    Widget:
+        MDNavigationDrawer:
+
+            id: nav_drawer
+
+            MDBoxLayout:
+                canvas.before:
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                        source: 'crop1.jpg'
+                orientation:'vertical'
+                spacing: '10dp'
+                padding: '10dp'
+                pos_hint: {'center_x': .5}
+                MDLabel:
+                    text:'Developer'
+                    bold: True
+                    user_font_size: "20dp"
+                    theme_text_color: "Custom"
+                    text_color: 1, 0, .5, 1
+                    halign:'center'
+                    size_hint_y:None
+                    height: 20
+                MDFloatingActionButton:
+                    icon:'me.png'
+                    elevation:12
+                    pos_hint: {'center_x': .5,'center_y': .8}
+                    user_font_size: "20dp"
+                MDLabel:
+                    size_hint_y:None
+                    height: 10
+                MDLabel:
+                    text:'Rushabh Patil'
+                    font_style:'Subtitle1'
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+                    bold: True
+                    pos_hint: {'center_x': .5}
+                    size_hint_y:None
+                    height: self.texture_size[1]
+                    halign:'center'
+
+                MDLabel:
+                    text:'rushabhpatil.rdp@gmail.com'
+                    font_style:'Caption'
+                    bold: True
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+                    size_hint_y:None
+                    height: self.texture_size[1]
+                    halign:'center'
+                MDLabel:
+                    size_hint_y:None
+                    height: 230
+
+                ScrollView:
+
+                    MDList:
+
+                        OneLineIconListItem:
+
+                            text:'Github Profile'
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            bold: True
+                            on_press: root.open_link('https://github.com/rushbhpatil')
+                            IconLeftWidget:
+
+                                icon:"Github-icon.png"
+                                user_font_size: "7dp"
+                                pos_hint: {'center_x': .5, 'center_y': .5}
+
+                        MDLabel:
+                            size_hint_y:None
+                            height: 60
+                        OneLineIconListItem:
+
+                            text:'Linkedin Profile'
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            bold: True
+                            on_press: root.open_link('https://www.linkedin.com/in/rushbh-patil-77313062/')
+                            IconLeftWidget:
+                                icon:'Linkedin-icon.png'
+                                user_font_size: "7dp"
+                                pos_hint: {'center_x': .5, 'center_y': .5}
+                MDCard:
+                    md_bg_color:0, 0, 0, 0
+                    orientation:'vertical'
+                    size_hint:None,None
+                    pos_hint: {'center_x': .5, 'center_y': .1}
+                    height:100
+                    width:80
+                    elevation:0
+
+
+
+                    MDLabel:
+                        text:'Made For'
+                        theme_text_color: "Custom"
+                        text_color:176/255,176/255,176/255,1
+                        font_size: "9dp"
+                        pos_hint: {'center_x': .55, 'center_y': .5}
+
+                        halign:'center'
+                        size_hint:1,None
+                        height:10
+                    MDIconButton:
+                        md_bg_color:0, 0, 0, 0
+                        icon: "absys_logo.png"
+                        user_font_size: "18dp"
+                        halign:'center'
+                        size_hint:None,None
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+
+
+
+
+
+
+
+
+<Option>:
+    canvas:
+        Color:
+            rgba: 138/255,43/255,226/255,.4
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    name: 'option_screen'
+
+    orientation:'vertical'
+    spacing: '20dp'
+
+    on_enter:root.build()
+    MDToolbar:
+        title:'Choose Option'
+        type: "top"
+        md_bg_color:152/255,87/255,189/255,1
+        left_action_items: [["arrow-left", lambda x: root.back()]]
+        size_hint_y:0.1
+        pos_hint: {'top':1.0}
+        elevation:10
+
+
+    MDCard:
+        md_bg_color:138/255,43/255,226/255,1
+        orientation:'vertical'
+        size_hint:None,None
+        pos_hint: {'center_x': .5, 'center_y': .74}
+        height:110
+        width:60
+        elevation:8
+
+
+        MDIconButton:
+            md_bg_color:138/255,43/255,226/255,1
+            icon: "Add Stock.png"
+            user_font_size: "40dp"
+            halign:'center'
+            size_hint:None,None
+            pos_hint: {'center_x': .5, 'center_y': .6}
+            elevation:6
+            on_press :
+
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'body_screen'
+
+        MDLabel:
+            text:'Add Stock'
+            theme_text_color: "Custom"
+            text_color:1,1,1,1
+            font_size: "15dp"
+            pos_hint: {'center_x': .5, 'center_y': .4}
+            halign:'center'
+
+
+    MDCard:
+        md_bg_color:138/255,43/255,226/255,1
+        orientation:'vertical'
+        size_hint:None,None
+        pos_hint: {'center_x': .5, 'center_y': .454}
+        height:110
+        width:60
+        elevation:8
+
+
+        MDIconButton:
+            md_bg_color:138/255,43/255,226/255,1
+            icon: "Remove Stock.png"
+            user_font_size: "40dp"
+            halign:'center'
+            size_hint:None,None
+            pos_hint: {'center_x': .5, 'center_y': .6}
+#            disabled : True if root.flag_dis==True else False
+            on_press :
+
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'RemoveStock_screen'
+
+        MDLabel:
+            text:'Remove Stock'
+            theme_text_color: "Custom"
+            text_color:1,1,1,1
+            pos_hint: {'center_x': .5, 'center_y': .4}
+            font_size: "15dp"
+            halign:'center'
+
+
+    MDCard:
+        md_bg_color:138/255,43/255,226/255,1
+        orientation:'vertical'
+        size_hint:None,None
+        pos_hint: {'center_x': .5, 'center_y': .17}
+        height:110
+        width:60
+        elevation:8
+
+        MDIconButton:
+            icon: "Check Stoploss.png"
+            user_font_size: "40dp"
+            halign:'center'
+            size_hint:None,None
+            pos_hint: {'center_x': .5, 'center_y': .6}
+#            disabled : False if root.flag_dis==False else True
+            on_press :
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'Stoploss_ip'
+
+        MDLabel:
+            text:'Check Stoploss'
+            theme_text_color: "Custom"
+            text_color:1,1,1,1
+            font_size: "15dp"
+            pos_hint: {'center_x': .5, 'center_y': .4}
+            halign:'center'
+
+
+<ListApp>:
+    name: 'Stoploss_ip'
+
+    on_enter:root.build()
+    MDBoxLayout:
+        orientation:'vertical'
+        MDToolbar:
+            title:'Stoploss'
+            type: "top"
+            md_bg_color:152/255,87/255,189/255,1
+            left_action_items: [["arrow-left", lambda x: root.back()]]
+            right_action_items: [["reload", lambda x: root.update()]]
+            size_hint_y:0.1
+            pos_hint: {'top':1.0}
+            elevation:10
+
+        ScrollView:
+            MDList:
+                id: list_view
+                pos_hint: {'y':3.0}
+
+
+
