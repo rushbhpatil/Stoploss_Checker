@@ -21,7 +21,7 @@ It takes input in search bar and sealect the Stock of your choice from the Recyc
   - If user changes the device he/she can login from there and access the data anywhere any time
   - Easy to use
   
-#### **The Screen GUI and information related to it is as follows**
+#### **The Screen UI**
 
 ### Presplash Screen:
 
