@@ -10,7 +10,7 @@ import sys, time, threading
 import pyrebase
 from kivymd.uix.screen import MDScreen
 from kivy.uix.screenmanager import ScreenManager, Screen
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta
 import pandas_datareader.data as web
 from kivymd.theming import ThemeManager
 import pandas as pd
@@ -18,8 +18,8 @@ from kivymd.icon_definitions import md_icons
 from kivy.utils import get_color_from_hex
 import webbrowser
 from kivymd.uix.screen import Screen
-from kivymd.uix.list import MDList,ThreeLineListItem,ThreeLineAvatarIconListItem,OneLineListItem
-from kivymd.uix.list import IconLeftWidget,ImageLeftWidget
+from kivymd.uix.list import MDList, ThreeLineListItem, ThreeLineAvatarIconListItem, OneLineListItem
+from kivymd.uix.list import IconLeftWidget, ImageLeftWidget
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.button import Button
 from kivymd.uix.card import MDCardSwipe
@@ -44,17 +44,20 @@ import pandas as pd
 from kivy.clock import Clock
 from functools import partial
 from kivymd.uix.dialog import MDDialog
-from kivymd.uix.textfield import MDTextField,MDTextFieldRound
+from kivymd.uix.textfield import MDTextField, MDTextFieldRound
 from kivymd.uix.label import MDLabel
 from kivymd.toast import toast
 from kivy.core.window import Window
 import ssl
+
 ssl._create_default_https_context = ssl._create_unverified_context
-
-
-username =''
+Window.keyboard_anim_args = {"d":.2,"t":"linear"}
+Window.softinput_mode = "below_target"
+username = ''
 
 fg = BooleanProperty(False)
+
+
 class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,
                                  RecycleGridLayout):
     ''' Adds selection and focus behaviour to the view. '''
@@ -92,19 +95,18 @@ class SelectableLabel(RecycleDataViewBehavior, MDLabel):
 
     def apply_selection(self, rv, index, is_selected):
 
-
         ''' Respond to the selection of items in the view. '''
 
         self.selected = is_selected
         if is_selected:
 
             # App.get_running_app().root.widget_1.ids.txt_input1.text = str(rv.data[index].get("text"))
-            xx =str(rv.data[index].get("text"))
+            xx = str(rv.data[index].get("text"))
             if (xx.find('(NSI)') != -1):
-                x,y = xx.split(" (NSI)")
+                x, y = xx.split(" (NSI)")
                 add_sym = '.NS'
             else:
-                x,y = xx.split(" (BSE)")
+                x, y = xx.split(" (BSE)")
                 add_sym = '.BO'
             print(xx)
             print(x)
@@ -119,21 +121,18 @@ class SelectableLabel(RecycleDataViewBehavior, MDLabel):
                     columnSeriesObj_sym = file.iloc[:, 0]
                     columnSeriesObj1 = file.iloc[:, 1]
                     columnSeriesObj_ex = file.iloc[:, 2]
-                    before_sym,b = columnSeriesObj_sym.values[i].split('.')
+                    before_sym, b = columnSeriesObj_sym.values[i].split('.')
 
-
-                    if columnSeriesObj1.values[i] == App.get_running_app().root.get_screen('body_screen').widget_1.ids.stock_name.text:
-                        App.get_running_app().root.get_screen('body_screen').widget_1.ids.stock_symbol.text = before_sym + add_sym
-
-
-
+                    if columnSeriesObj1.values[i] == App.get_running_app().root.get_screen(
+                            'body_screen').widget_1.ids.stock_name.text:
+                        App.get_running_app().root.get_screen(
+                            'body_screen').widget_1.ids.stock_symbol.text = before_sym + add_sym
 
 
 class RV(RecycleView):
     def clear_selection(self):
         for c in self.children[0].children:
             c.selected = False
-
 
 
 class DropDownWidget(MDBoxLayout):
@@ -144,10 +143,12 @@ class DropDownWidget(MDBoxLayout):
     stock_symbol = ObjectProperty(None)
     purchase_price = ObjectProperty(None)
     stop_loss = ObjectProperty(None)
+
     def back(self):
         self.clear_texts()
         MDApp.get_running_app().root.transition.direction = 'right'
         MDApp.get_running_app().root.current = 'option_screen'
+
     def clear_texts(self):
         App.get_running_app().root.get_screen('body_screen').widget_1.ids.txt_input.text = ""
         App.get_running_app().root.get_screen('body_screen').widget_1.ids.stock_name.text = ""
@@ -159,47 +160,54 @@ class DropDownWidget(MDBoxLayout):
         updown = Firebaseupdown()
         updown.fire_upload()
         updown.fire_download()
-        
+
         self.clear_texts()
 
         toast("The data has been synchronized with cloud")
+
     def btn_input(self):
         global counter
         end = datetime.today().date()
         start = end - timedelta(days=7)
 
         try:
-            if App.get_running_app().root.get_screen('body_screen').widget_1.ids.stock_name.text=='':
+            if App.get_running_app().root.get_screen('body_screen').widget_1.ids.stock_name.text == '':
                 toast(text='Please Select Stock')
-            elif App.get_running_app().root.get_screen('body_screen').widget_1.ids.stock_symbol.text=='':
+            elif App.get_running_app().root.get_screen('body_screen').widget_1.ids.stock_symbol.text == '':
                 toast(text='Please Select Stock')
-            elif App.get_running_app().root.get_screen('body_screen').widget_1.ids.purchase_price.text=='':
+            elif App.get_running_app().root.get_screen('body_screen').widget_1.ids.purchase_price.text == '':
                 toast(text='Please Enter Purchase Price')
-            elif  App.get_running_app().root.get_screen('body_screen').widget_1.ids.stop_loss.text=='':
+            elif App.get_running_app().root.get_screen('body_screen').widget_1.ids.stop_loss.text == '':
                 toast(text='Please Enter Stoploss')
 
-            elif float(App.get_running_app().root.get_screen('body_screen').widget_1.ids.stop_loss.text) <= float(App.get_running_app().root.get_screen('body_screen').widget_1.ids.purchase_price.text):
+            elif float(App.get_running_app().root.get_screen('body_screen').widget_1.ids.stop_loss.text) <= float(
+                    App.get_running_app().root.get_screen('body_screen').widget_1.ids.purchase_price.text):
 
                 print("Stock Name:", App.get_running_app().root.get_screen('body_screen').widget_1.ids.stock_name.text,
-                      "Stock Symbol:", App.get_running_app().root.get_screen('body_screen').widget_1.ids.stock_symbol.text)
-                print("Purchase Price:", App.get_running_app().root.get_screen('body_screen').widget_1.ids.purchase_price.text,
+                      "Stock Symbol:",
+                      App.get_running_app().root.get_screen('body_screen').widget_1.ids.stock_symbol.text)
+                print("Purchase Price:",
+                      App.get_running_app().root.get_screen('body_screen').widget_1.ids.purchase_price.text,
                       "Stop Loss(%):", App.get_running_app().root.get_screen('body_screen').widget_1.ids.stop_loss.text)
 
                 # write data to csv file
 
-
-                file_name = username +"_stoploss.csv"
+                file_name = username + "_stoploss.csv"
                 if path.exists(file_name):
                     with open(file_name, "a+", newline='')as newFile:
                         fieldnames = ["Stock Name", "Stock Symbol", "Purchase Price", "Stop Loss(%)"]
                         newFileWriter = csv.DictWriter(newFile, fieldnames=fieldnames)
-                        newFileWriter.writerow({"Stock Name": App.get_running_app().root.get_screen('body_screen').widget_1.ids.stock_name.text,
-                                                "Stock Symbol": App.get_running_app().root.get_screen('body_screen').widget_1.ids.stock_symbol.text,
-                                                "Purchase Price": App.get_running_app().root.get_screen('body_screen').widget_1.ids.purchase_price.text,
-                                                "Stop Loss(%)": App.get_running_app().root.get_screen('body_screen').widget_1.ids.stop_loss.text})
+                        newFileWriter.writerow({"Stock Name": App.get_running_app().root.get_screen(
+                            'body_screen').widget_1.ids.stock_name.text,
+                                                "Stock Symbol": App.get_running_app().root.get_screen(
+                                                    'body_screen').widget_1.ids.stock_symbol.text,
+                                                "Purchase Price": App.get_running_app().root.get_screen(
+                                                    'body_screen').widget_1.ids.purchase_price.text,
+                                                "Stop Loss(%)": App.get_running_app().root.get_screen(
+                                                    'body_screen').widget_1.ids.stop_loss.text})
 
                 else:
-                    myFile = open(file_name, 'w+',newline='')
+                    myFile = open(file_name, 'w+', newline='')
                     myData = [["Stock Name", "Stock Symbol", "Purchase Price", "Stop Loss(%)"],
                               [App.get_running_app().root.get_screen('body_screen').widget_1.ids.stock_name.text,
                                App.get_running_app().root.get_screen('body_screen').widget_1.ids.stock_symbol.text,
@@ -210,14 +218,12 @@ class DropDownWidget(MDBoxLayout):
                         writer = csv.writer(myFile)
                         writer.writerows(myData)
 
-                # self.popup = Popup(title='Signing In', content=Image(source='please_wait.gif', size_hint=(1, 1),
-                #                                                      pos_hint={'center_x': .5, 'center_y': .5}))
-                # self.popup.open()
+
                 threading.Thread(target=self.sync_file()).start()
 
                 counter += 1
             else:
-                App.get_running_app().root.get_screen('body_screen').widget_1.ids.stop_loss.text=''
+                App.get_running_app().root.get_screen('body_screen').widget_1.ids.stop_loss.text = ''
                 toast('The Stoloss should be less then Purchase price')
         except ConnectionAbortedError:
             toast("Check your Internet connection")
@@ -234,7 +240,8 @@ class DropDownWidget(MDBoxLayout):
         except KeyError:
             toast('Some thing went wrong')
             pass
-	
+
+
 class MyTextInput(MDTextFieldRound):
     txt_input = ObjectProperty(None)
 
@@ -255,7 +262,7 @@ class MyTextInput(MDTextFieldRound):
     def on_text(self, instance, value):
         # find all the occurrence of the word
         app = MDApp.get_running_app()
-        print(app.root.ids.body.children[0])  # the dropdown widget
+
         ddw = app.root.ids.body.children[0]
 
         ddw.rv_data_list = []
@@ -284,68 +291,41 @@ class Body(MDScreen):
         dw.clear_texts()
         MDApp.get_running_app().root.transition.direction = 'right'
         MDApp.get_running_app().root.current = 'option_screen'
-    def hook_keyboard(self, Window, key, *largs):
-        if key == 27:
-            self.back()
-        return True
 
 
-    def on_pre_enter (self):
-        Window.bind(on_keyboard=self.hook_keyboard)
-        f = pd.read_csv("Stock Tickers.csv", encoding = "ISO-8859-1", engine='python')
+    def on_pre_enter(self):
+
+        f = pd.read_csv("Stock Tickers.csv", encoding="ISO-8859-1", engine='python')
         fl = len(f.index)
         file = pd.DataFrame(f, columns=['Symbols', 'Name', 'Exchange'])
 
         wl = []
         for i in range(fl):
             for index in range(1):
-
                 columnSeriesObj = file.iloc[:, 1]
                 self.columnSeriesObj_ex = file.iloc[:, 2]
 
-
                 wl.append(columnSeriesObj.values[i] + " (" + self.columnSeriesObj_ex.values[i] + ")")
 
-
         tp = tuple(wl)
-
-
 
         self.widget_1 = DropDownWidget()
 
         self.widget_1.ids.txt_input.word_list = wl
         self.widget_1.ids.txt_input.starting_no = 3
 
-
         self.add_widget(self.widget_1)
-
-
 
 
 class Signin(MDScreen):
     user_name = ObjectProperty(None)
 
-    def hook_keyboard(self, Window, key, *largs):
-        if key == 27:
-            button_yes = MDFlatButton(text="Ok", text_color=(98 / 255, 0, 238 / 255, 1),
-                                     on_press=self.quit_appp)
-            button_No = MDFlatButton(text="Ok", text_color=(98 / 255, 0, 238 / 255, 1),
-                                      on_press=self.close_dialog1)
-            self.signin_dialog = MDDialog(title='Are you sure?', text="This action will close the App",
-                                          size_hint=(.9, .5), buttons=[button_No,button_yes])
-            self.signin_dialog.open()
-        return True
-
-    def quit_appp(self,dl):
-        run1().stop()
-    def open_link(instance,link):
+    def open_link(instance, link):
 
         webbrowser.open(link)
 
-    def build(self):
-        Window.bind(on_keyboard=self.hook_keyboard)
 
-    def check(self,email):
+    def check(self, email):
         regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
         # pass the regular expression
         # and the string in search() method
@@ -355,7 +335,6 @@ class Signin(MDScreen):
         else:
             return False
 
-
     def btn(self):
         global username
         global fg
@@ -364,51 +343,49 @@ class Signin(MDScreen):
             username, u = un.split('@')
             print(username)
             fg = True
-            # self.popup = Popup(title='Signing In', content=Image(source='please_wait.gif', size_hint=(1, 1),
-            #                                                                pos_hint={'center_x': .5, 'center_y': .5}))
-            # self.popup.open()
+
             threading.Thread(target=self.check_fb_file()).start()
         else:
-            button_ok = MDFlatButton(text="Ok", text_color=(98 / 255, 0, 238 / 255, 1),
-                                          on_press=self.close_dialog)
-            self.signin_dialog = MDDialog(title='Error',text="That doesn't appear to be a valid email address",
-                                     size_hint=(.9,.5),buttons=[button_ok])
-            self.signin_dialog.open()
-
+            Clock.schedule_once(self.pop_up1, 0.5)
+    def pop_up1(self, dt):
+        button_ok = MDFlatButton(text="Ok", text_color=(98 / 255, 0, 238 / 255, 1), font_size="18sp",
+                                 on_press=self.close_dialog1)
+        self.signin_dialog = MDDialog(title='Error', text="That doesn't appear to be a valid email address",
+                                      size_hint=(.9, .5), buttons=[button_ok])
+        self.signin_dialog.open()
     def check_fb_file(self):
         down = Firebaseupdown()
         down.fire_download()
         self.user_name.text = ''
         MDApp.get_running_app().root.transition.direction = 'left'
         MDApp.get_running_app().root.current = 'option_screen'
-        # self.popup.dismiss()
 
-    def close_dialog(self,obj):
+    def appstop(self):
+        button_yes = MDFlatButton(text="Yes", text_color=(98 / 255, 0, 238 / 255, 1), font_size="18sp",
+                                  on_press=self.quit_appp)
+        button_No = MDFlatButton(text="No", text_color=(1, 0, 0, 1), font_size="18sp",
+                                 on_press=self.close_dialog)
+        self.signin_dialog = MDDialog(title='Are you sure?', text="This action will close the App",
+                                      size_hint=(.9, .5), buttons=[button_No, button_yes])
+        self.signin_dialog.open()
+    def close_dialog1(self, obj):
         self.signin_dialog.dismiss()
         self.user_name.text = ''
-    def close_dialog1(self,obj):
-        self.dialog.dismiss()
-
-
-
+    def close_dialog(self, obj):
+        self.signin_dialog.dismiss()
+    def quit_appp(self, dl):
+        Run1().stop()
 
 counter = 1
-class Option(MDScreen):
 
+
+class Option(MDScreen):
     global username
     flag_dis = BooleanProperty(False)
-
-    def hook_keyboard(self, Window, key, *largs):
-        if key == 27:
-            self.back()
-        return True
-
-
 
     def build(self, *args):
         global counter
 
-        Window.bind(on_keyboard=self.hook_keyboard)
         file_name = username + "_stoploss.csv"
         if path.exists(file_name) and counter == 1:
             toast("The data has been synchronized with cloud")
@@ -421,11 +398,11 @@ class Option(MDScreen):
             self.flag_dis = False
             print('All good')
             pass
-        
 
     def back(self):
         MDApp.get_running_app().root.transition.direction = 'right'
         MDApp.get_running_app().root.current = 'signin_screen'
+
 
 class Firebaseupdown():
     global check1
@@ -444,11 +421,11 @@ class Firebaseupdown():
     storage = firebase.storage()
 
     def fire_upload(self):
-        #upload
+        # upload
         try:
 
             path_on_cloud = username + f"/{username}_stoploss.csv"
-            path_local = username +"_stoploss.csv"
+            path_local = username + "_stoploss.csv"
             self.storage.child(path_on_cloud).put(path_local)
 
             check1 = True
@@ -462,11 +439,11 @@ class Firebaseupdown():
             toast('Please check your Internet connection')
 
     def fire_download(self):
-        #download
+        # download
         try:
             downloadlink = username + f"/{username}_stoploss.csv"
-            self.storage.child(downloadlink).download(username+'_stoploss.csv')
-            self.storage.child(downloadlink).get_url(username+'_stoploss.csv')
+            self.storage.child(downloadlink).download(username + '_stoploss.csv')
+            self.storage.child(downloadlink).get_url(username + '_stoploss.csv')
         except ConnectionError:
             toast('Please check your Internet connection')
         except ConnectionRefusedError:
@@ -479,9 +456,6 @@ class Firebaseupdown():
             toast('Something went wrong,Please check your Internet connection')
 
 
-
-
-
 class SwipeToDeleteItem(MDCardSwipe):
     '''Card with `swipe-to-delete` behavior.'''
 
@@ -489,19 +463,18 @@ class SwipeToDeleteItem(MDCardSwipe):
     secondary_text = StringProperty()
     tertiary_text = StringProperty()
 
-class Remove_stock(MDScreen):
 
+class Remove_stock(MDScreen):
     text = StringProperty()
     secondary_text = StringProperty()
     tertiary_text = StringProperty()
     inst = None
+    def on_leave(self):
 
-
-
-
+        self.ids.md_list.clear_widgets()
     def build(self):
+
         global fg
-        Window.bind(on_keyboard=self.hook_keyboard)
         if fg:
             try:
 
@@ -514,40 +487,39 @@ class Remove_stock(MDScreen):
                 self.back()
                 toast("File Not found, Please Add stock")
 
-
         emptylist_lbl = MDLabel(text='\n\n\n\n\n\nThe List is empty, Please Add Stock Details',
                                 pos_hint={'center_x': .5, 'center_y': .5}, halign='center')
 
         try:
             for name, symbol in zip(file.iloc[:, 0], file.iloc[:, 1]):
-                symb,market_name = symbol.split('.')
+                symb, market_name = symbol.split('.')
                 if market_name == 'NS':
                     mknm = 'NSE'
                 else:
                     mknm = 'BSE'
-                item = SwipeToDeleteItem(text=name, secondary_text=symbol,tertiary_text =mknm)
+                item = SwipeToDeleteItem(text=name, secondary_text=symbol, tertiary_text=mknm)
                 self.ids.md_list.add_widget(item)
         except UnboundLocalError:
             self.back()
-        if len(self.ids.md_list.children)==0:
+        if len(self.ids.md_list.children) == 0:
             self.ids.md_list.add_widget(emptylist_lbl)
-
 
     def remove_item_csv(self, txt, sec_txt, instance):
         self.text = txt
         self.secondary_text = sec_txt
         self.inst = instance
         print(f'1: {txt} 2:{sec_txt}')
-        print(instance)
+
 
         button_cancel = MDFlatButton(text="CANCEL", text_color=(1, 0, 0, 1), on_press=self.close_dialog)
-        button_confirm = MDFlatButton(text="CONFIRM", text_color=(98 / 255, 0, 238 / 255, 1),on_press=self.dialog_confirm)
+        button_confirm = MDFlatButton(text="CONFIRM", text_color=(98 / 255, 0, 238 / 255, 1),
+                                      on_press=self.dialog_confirm)
 
         self.dialog = MDDialog(
             title='Are you sure?',
             text=f"This will remove {txt} from List",
-            pos_hint= {'center_x': .5, 'center_y': .5},
-            size_hint=(.8,.5),
+            pos_hint={'center_x': .5, 'center_y': .5},
+            size_hint=(.8, .5),
             buttons=[button_cancel, button_confirm])
         self.dialog.set_normal_height()
         self.dialog.open()
@@ -573,13 +545,14 @@ class Remove_stock(MDScreen):
 
             self.dialog.dismiss()
             self.toast_popup()
-            emptylist_lbl = MDLabel(text='\n\n\n\n\n\nThe List is empty, Please Add Stock Details', pos_hint={'center_x':.5,'center_y':.5},halign='center')
-            if len(self.ids.md_list.children)==0:
+            emptylist_lbl = MDLabel(text='\n\n\n\n\n\nThe List is empty, Please Add Stock Details',
+                                    pos_hint={'center_x': .5, 'center_y': .5}, halign='center')
+            if len(self.ids.md_list.children) == 0:
                 self.ids.md_list.add_widget(emptylist_lbl)
             updown = Firebaseupdown()
             updown.fire_upload()
             updown.fire_download()
-            toast("The data has been synchronized with cloud")
+
         except ConnectionAbortedError:
             toast("Check your Internet connection")
         except ConnectionRefusedError:
@@ -599,27 +572,23 @@ class Remove_stock(MDScreen):
         except:
             toast("Something went wrong")
 
-    def close_dialog(self,obj):
+    def close_dialog(self, obj):
         self.dialog.dismiss()
 
     def toast_popup(self):
         toast(f'The {self.text} is removed from the list')
-    def hook_keyboard(self, Window, key, *largs):
-        if key == 27:
-            self.back()
-        return True
+
 
     def back(self):
         MDApp.get_running_app().root.transition.direction = 'right'
         MDApp.get_running_app().root.current = 'option_screen'
-        self.ids.md_list.clear_widgets()
+        # self.ids.md_list.clear_widgets()
+
+
 class ListApp(MDScreen):
     built = BooleanProperty(False)
 
-    def hook_keyboard(self, Window, key, *largs):
-        if key == 27:
-            self.back()
-        return True
+
     def update(self):
         self.ids.list_view.clear_widgets()
         self.built = False
@@ -630,11 +599,11 @@ class ListApp(MDScreen):
         MDApp.get_running_app().root.current = 'option_screen'
 
     def build(self):
-        Window.bind(on_keyboard=self.hook_keyboard)
         if self.built:
             return
         self.built = True
-        self.popup = Popup(title='Calculating Stoploss', content=Image(source='please_wait.gif',size_hint=(1,1),pos_hint={'center_x':.5,'center_y':.5}))
+        self.popup = Popup(title='Calculating Stoploss', content=Image(source='please_wait.gif', size_hint=(1, 1),
+                                                                       pos_hint={'center_x': .5, 'center_y': .5}))
         self.popup.open()
         threading.Thread(target=self.actual_build).start()
 
@@ -657,9 +626,7 @@ class ListApp(MDScreen):
         end = datetime.today().date()
         start = end - timedelta(days=7)
 
-
         i = 0
-
 
         try:
             for index in range(self.fl):
@@ -667,7 +634,7 @@ class ListApp(MDScreen):
                 for index in range(1):
                     columnSeriesObj2 = file.iloc[:, 1]
 
-                    df = web.DataReader(columnSeriesObj2.values[i],'yahoo', start, end,retry_count=3)
+                    df = web.DataReader(columnSeriesObj2.values[i], 'yahoo', start, end, retry_count=3)
                     print(df)
                     print(df.index[-1].date())
                     days = ["Monday", "Tuesday", "Wednesday", "Thursday",
@@ -680,19 +647,18 @@ class ListApp(MDScreen):
                     columnSeriesObj1 = file.iloc[:, 3]
                     ObjStoploss = file.iloc[:, 3]
 
-
                     pp = iter(columnSeriesObj1.values)
 
                     cp1 = columnSeriesObj.values[-1]
                     sl = columnSeriesObj1.values[i]
-                    print("cp "+str(cp1))
-                    print("sl "+str(sl))
+                    print("cp " + str(cp1))
+                    print("sl " + str(sl))
                     if cp1 <= sl:
                         Clock.schedule_once(partial(self.add_loss, Objname.values[i], str(cp1), str(sl)))
-                        i=i+1
+                        i = i + 1
                     else:
                         Clock.schedule_once(partial(self.add_profit, Objname.values[i], str(cp1), str(sl)))
-                        i=i+1
+                        i = i + 1
 
 
         except ConnectionAbortedError:
@@ -716,44 +682,75 @@ class ListApp(MDScreen):
 
         self.popup.dismiss()
 
-
     def add_loss(self, name, close_price, stop_loss, dt):
 
-            image = ImageLeftWidget(source='loss.png')
-            date_lbl = OneLineListItem(text=f'Date: {str(self.last_date)}, {self.weekday_s}',size_hint_y=None, height=5)
-            items = ThreeLineAvatarIconListItem(text=name, secondary_text='Close price: '+ close_price ,
-                                                tertiary_text='Stoploss: ' + stop_loss)
-            items.add_widget(image)
-            self.ids.list_view.add_widget(date_lbl)
-            self.ids.list_view.add_widget(items)
+        image = ImageLeftWidget(source='loss.png')
+        date_lbl = OneLineListItem(text=f'Date: {str(self.last_date)}, {self.weekday_s}', size_hint_y=None, height=5)
+        items = ThreeLineAvatarIconListItem(text=name, secondary_text='Close price: ' + close_price,
+                                            tertiary_text='Stoploss: ' + stop_loss)
+        items.add_widget(image)
+        self.ids.list_view.add_widget(date_lbl)
+        self.ids.list_view.add_widget(items)
 
     def add_profit(self, name, close_price, stop_loss, dt):
 
-            image = ImageLeftWidget(source='profit.jpg')
-            date_lbl = OneLineListItem(text=f'Date: {str(self.last_date)}, {self.weekday_s}', size_hint_y=None, height=5)
-            items = ThreeLineAvatarIconListItem(text=name,
-                                                secondary_text='Close price: ' + close_price,
-                                                tertiary_text='Stoploss: ' + stop_loss)
-            items.add_widget(image)
-            self.ids.list_view.add_widget(date_lbl)
-            self.ids.list_view.add_widget(items)
+        image = ImageLeftWidget(source='profit.jpg')
+        date_lbl = OneLineListItem(text=f'Date: {str(self.last_date)}, {self.weekday_s}', size_hint_y=None, height=5)
+        items = ThreeLineAvatarIconListItem(text=name,
+                                            secondary_text='Close price: ' + close_price,
+                                            tertiary_text='Stoploss: ' + stop_loss)
+        items.add_widget(image)
+        self.ids.list_view.add_widget(date_lbl)
+        self.ids.list_view.add_widget(items)
 
 
 
+class Run1(MDApp):
 
-
-sm = ScreenManager()
-sm.add_widget(Signin(name='signin_screen'))
-sm.add_widget(Option(name='option_screen'))
-sm.add_widget(ListApp(name='Stoploss_ip'))
-sm.add_widget(Body(name='body_screen'))
-sm.add_widget(Remove_stock(name='RemoveStock_screen'))
-
-
-class run1(MDApp):
     def build(self):
         kv = Builder.load_file("stopl.kv")
+        Window.bind(on_keyboard=self.hook_keyboard)
         return kv
+    def hook_keyboard(self, Window, key, *largs):
+        if key == 27:
+            print(self.root.current)
+            self.back()
+        return True
 
+    def back(self):
+        if self.root.current == 'signin_screen':
+            button_yes = MDFlatButton(text="Yes", text_color=(98 / 255, 0, 238 / 255, 1),font_size= "18sp",
+                                      on_press=self.quit_appp)
+            button_No = MDFlatButton(text="No", text_color=(1,0,0, 1),font_size= "18sp",
+                                     on_press=self.close_dialog)
+            self.signin_dialog = MDDialog(title='Are you sure?', text="This action will close the App",
+                                          size_hint=(.9, .5), buttons=[button_No, button_yes])
+            self.signin_dialog.open()
+
+        elif self.root.current == 'option_screen':
+            self.root.transition.direction = 'right'
+            self.root.current = 'signin_screen'
+
+        elif self.root.current == 'body_screen':
+            self.root.transition.direction = 'right'
+            self.root.current = 'option_screen'
+
+        elif self.root.current == 'RemoveStock_screen':
+            self.root.transition.direction = 'right'
+            self.root.current = 'option_screen'
+
+
+        elif self.root.current == 'Stoploss_ip':
+            self.root.transition.direction = 'right'
+            self.root.current = 'option_screen'
+
+
+
+
+    def close_dialog(self, obj):
+        self.signin_dialog.dismiss()
+
+    def quit_appp(self, dl):
+        Run1().stop()
 if __name__ == "__main__":
-    run1().run()
+    Run1().run()
