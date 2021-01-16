@@ -55,7 +55,7 @@ ScreenManager:
 
 
         ScrollView:
-            scroll_timeout : 10
+            scroll_timeout : 100
             scroll_type:["content"]
 
             MDList:
@@ -327,8 +327,8 @@ ScreenManager:
         required: True
 
         color_active: 0, 0, 0, 1
-        helper_text: "Invalid email id"
-        helper_text_mode: "on_error"
+        helper_text: "Note: This Email Id will be used to store the Stock details on cloud."
+        helper_text_mode: "on_focus"
         halign:'center'
         pos_hint: {'center_x': .5, 'center_y': .5}
         size_hint_x: 0.9
@@ -367,7 +367,7 @@ ScreenManager:
                         size_hint_y:0.1
                         pos_hint: {'top':1.0}
                         left_action_items: [["menu", lambda x: nav_drawer.toggle_nav_drawer()]]
-                        right_action_items: [["exit-to-app", lambda x: app.stop()]]
+                        right_action_items: [["exit-to-app", lambda x: root.appstop()]]
                         md_bg_color:152/255,87/255,189/255,1
                         elevation:10
                     Widget:
@@ -565,7 +565,7 @@ ScreenManager:
             halign:'center'
             size_hint:None,None
             pos_hint: {'center_x': .5, 'center_y': .6}
-#            disabled : True if root.flag_dis==True else False
+            disabled : True if root.flag_dis==True else False
             on_press :
 
                 root.manager.transition.direction = 'left'
@@ -595,7 +595,7 @@ ScreenManager:
             halign:'center'
             size_hint:None,None
             pos_hint: {'center_x': .5, 'center_y': .6}
-#            disabled : False if root.flag_dis==False else True
+            disabled : False if root.flag_dis==False else True
             on_press :
                 root.manager.transition.direction = 'left'
                 root.manager.current = 'Stoploss_ip'
@@ -629,6 +629,3 @@ ScreenManager:
             MDList:
                 id: list_view
                 pos_hint: {'y':3.0}
-
-
-
